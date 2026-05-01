@@ -43,6 +43,17 @@ header {
   border-bottom: 1px solid #2a2d3e;
 }
 .logo { font-size: 1.4rem; font-weight: 700; letter-spacing: .04em; }
+.live-mixer-link {
+  color: var(--green);
+  text-decoration: none;
+  font-size: .88rem;
+  font-weight: 600;
+  padding: .3rem .7rem;
+  border: 1px solid var(--green);
+  border-radius: 6px;
+  transition: background .2s;
+}
+.live-mixer-link:hover { background: rgba(57,211,83,.12); }
 .score-bar { display: flex; gap: 1.4rem; font-size: .9rem; color: var(--text-dim); }
 .score-bar strong { color: var(--accent); }
 

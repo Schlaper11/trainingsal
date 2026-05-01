@@ -1,0 +1,366 @@
+/* =====================================================
+   MixMaster – Stylesheet
+   Dark studio aesthetic, mobile-friendly
+   ===================================================== */
+
+/* ---------- Reset & base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #0f1117;
+  --surface:    #1a1d27;
+  --surface2:   #23273a;
+  --accent:     #6c63ff;
+  --accent2:    #ff6584;
+  --green:      #39d353;
+  --yellow:     #f0c040;
+  --red:        #e05252;
+  --text:       #e8eaf6;
+  --text-dim:   #7c84a8;
+  --radius:     12px;
+  --fader-h:    180px;
+}
+
+html { font-size: 16px; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ---------- Header ---------- */
+header {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #2a2d3e;
+}
+.logo { font-size: 1.4rem; font-weight: 700; letter-spacing: .04em; }
+.score-bar { display: flex; gap: 1.4rem; font-size: .9rem; color: var(--text-dim); }
+.score-bar strong { color: var(--accent); }
+
+/* ---------- Main ---------- */
+main {
+  width: 100%;
+  max-width: 900px;
+  padding: 1rem 1.2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+/* ---------- Mission card ---------- */
+.mission-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1rem 1.4rem;
+  border-left: 4px solid var(--accent);
+}
+.mission-card h2 { font-size: 1.15rem; margin-bottom: .3rem; }
+.mission-card p  { color: var(--text-dim); font-size: .9rem; }
+
+/* ---------- Visualiser ---------- */
+.visualiser-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .8rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+#visualiser {
+  width: 100%;
+  max-width: 800px;
+  height: 100px;
+  border-radius: 8px;
+  background: #0a0c13;
+}
+.transport {
+  display: flex;
+  gap: .7rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: .55rem 1.1rem;
+  font-size: .88rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: filter .15s, transform .1s;
+}
+.btn:hover  { filter: brightness(1.15); }
+.btn:active { transform: scale(.96); }
+
+.btn-play   { background: var(--green);  color: #0a1a0a; }
+.btn-ref    { background: var(--accent); color: #fff; }
+.btn-stop   { background: #444;          color: var(--text); }
+.btn-submit { background: var(--accent); color: #fff; padding: .7rem 2rem; font-size: 1rem; }
+.btn-reset  { background: var(--surface2); color: var(--text-dim); }
+.btn-next   { background: var(--accent); color: #fff; padding: .7rem 2rem; font-size: 1rem; margin-top: 1rem; }
+
+/* ---------- Mixer ---------- */
+.mixer {
+  display: flex;
+  gap: 1.2rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.4rem;
+  flex-wrap: wrap;
+}
+
+/* -- Channel strip -- */
+#channel-main {
+  flex: 1;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.channel-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: center;
+  padding: .4rem;
+  background: var(--surface2);
+  border-radius: 6px;
+}
+
+/* -- EQ section -- */
+.eq-section {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.knob-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35rem;
+  flex: 1;
+  min-width: 80px;
+}
+.knob-group label {
+  font-size: .78rem;
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.3;
+}
+.hz { display: block; font-size: .7rem; color: var(--text-dim); }
+
+/* -- Sliders -- */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* EQ sliders – horizontal */
+.eq-slider, .fx-slider {
+  width: 100%;
+  height: 4px;
+  border-radius: 4px;
+  accent-color: var(--accent);
+}
+.eq-slider::-webkit-slider-runnable-track,
+.fx-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 4px;
+}
+.eq-slider::-webkit-slider-thumb,
+.fx-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: -7px;
+  transition: background .2s;
+}
+.eq-slider:hover::-webkit-slider-thumb,
+.fx-slider:hover::-webkit-slider-thumb { background: var(--accent2); }
+
+/* Volume fader – vertical */
+.fader-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .4rem;
+}
+.fader-section label { font-size: .78rem; color: var(--text-dim); }
+.fader {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 28px;
+  height: var(--fader-h);
+  accent-color: var(--green);
+}
+
+/* -- Value badges -- */
+.value-badge {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--surface2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  min-width: 48px;
+  text-align: center;
+}
+
+/* -- FX panel -- */
+.fx-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  justify-content: space-around;
+  min-width: 110px;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: .8rem .9rem;
+}
+.fx-panel .knob-group { min-width: unset; }
+
+/* ---------- Meter ---------- */
+.meter-section {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: .8rem 1.2rem;
+}
+.meter-label { font-size: .8rem; color: var(--text-dim); white-space: nowrap; }
+.meter-bar-wrap {
+  flex: 1;
+  height: 18px;
+  background: var(--surface2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.meter-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--green) 0%, var(--yellow) 75%, var(--red) 100%);
+  transition: width .08s linear;
+  border-radius: 6px;
+}
+.meter-scale {
+  display: flex;
+  justify-content: space-between;
+  width: 80px;
+  font-size: .65rem;
+  color: var(--text-dim);
+}
+
+/* ---------- Submit row ---------- */
+.submit-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---------- Result overlay ---------- */
+.result-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.result-overlay.hidden { display: none; }
+.result-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 2rem 2.4rem;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,.6);
+  border: 1px solid var(--accent);
+}
+.result-emoji { font-size: 3.5rem; }
+.result-box h2 { font-size: 1.5rem; margin: .6rem 0 .4rem; }
+.result-box p  { color: var(--text-dim); font-size: .9rem; }
+.result-breakdown {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  text-align: left;
+}
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface2);
+  border-radius: 6px;
+  padding: .4rem .8rem;
+  font-size: .85rem;
+}
+.breakdown-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: #2a2d3e;
+  border-radius: 4px;
+  margin: 0 .8rem;
+  overflow: hidden;
+}
+.breakdown-bar { height: 100%; border-radius: 4px; transition: width .4s; }
+
+/* ---------- Tutorial overlay ---------- */
+.tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+.tutorial-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 2.4rem 2.8rem;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,.6);
+  border: 1px solid var(--accent);
+}
+.tutorial-box h1 { font-size: 1.6rem; margin-bottom: .8rem; }
+.tutorial-box em  { color: var(--accent); font-style: normal; }
+.tutorial-box p   { color: var(--text-dim); margin-bottom: 1rem; font-size: .95rem; }
+.tutorial-box ul  {
+  list-style: none;
+  text-align: left;
+  display: inline-block;
+  margin-bottom: 1.2rem;
+}
+.tutorial-box li { padding: .35rem 0; font-size: .9rem; }
+
+/* ---------- Responsive tweaks ---------- */
+@media (max-width: 600px) {
+  .mixer { flex-direction: column; }
+  .fader { height: 100px; }
+  .eq-section { gap: .6rem; }
+  .score-bar { gap: .8rem; font-size: .8rem; }
+}

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MixMaster – Das Misch-Trainings-Spiel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="logo">🎛️ MixMaster</div>
+    <div class="score-bar">
+      <span>Level: <strong id="level-display">1</strong></span>
+      <span>Punkte: <strong id="score-display">0</strong></span>
+      <span>Beste: <strong id="highscore-display">0</strong></span>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main>
+
+    <!-- Mission card -->
+    <section class="mission-card" id="mission-card">
+      <h2 id="mission-title">Aufgabe laden…</h2>
+      <p id="mission-desc"></p>
+    </section>
+
+    <!-- Visualiser -->
+    <section class="visualiser-section">
+      <canvas id="visualiser" width="800" height="120"></canvas>
+      <div class="transport">
+        <button id="btn-play-ref"  class="btn btn-ref"   title="Referenz-Mix kurz anhören">🎵 Referenz hören</button>
+        <button id="btn-play-track" class="btn btn-play" title="Deinen Mix abspielen">▶ Spielen</button>
+        <button id="btn-stop"       class="btn btn-stop" title="Stopp">⏹ Stopp</button>
+      </div>
+    </section>
+
+    <!-- Mixer board -->
+    <section class="mixer">
+
+      <!-- Channel strip: Voice / Synth / Drums based on level -->
+      <div class="channel" id="channel-main">
+        <div class="channel-label" id="channel-label">🎤 Gesang</div>
+
+        <!-- EQ knobs -->
+        <div class="eq-section">
+          <div class="knob-group">
+            <label>Höhen <span class="hz">(8 kHz)</span></label>
+            <input type="range" id="eq-high" class="slider eq-slider" min="-20" max="20" step="0.5" value="0" />
+            <div class="value-badge" id="eq-high-val">0 dB</div>
+          </div>
+          <div class="knob-group">
+            <label>Mitten <span class="hz">(1 kHz)</span></label>
+            <input type="range" id="eq-mid" class="slider eq-slider" min="-20" max="20" step="0.5" value="0" />
+            <div class="value-badge" id="eq-mid-val">0 dB</div>
+          </div>
+          <div class="knob-group">
+            <label>Tiefen <span class="hz">(100 Hz)</span></label>
+            <input type="range" id="eq-low" class="slider eq-slider" min="-20" max="20" step="0.5" value="0" />
+            <div class="value-badge" id="eq-low-val">0 dB</div>
+          </div>
+        </div>
+
+        <!-- Volume fader -->
+        <div class="fader-section">
+          <label>Lautstärke</label>
+          <input type="range" id="fader-vol" class="slider fader" min="0" max="150" step="1" value="100"
+                 orient="vertical" />
+          <div class="value-badge" id="fader-vol-val">100 %</div>
+        </div>
+
+      </div><!-- /channel -->
+
+      <!-- Reverb / Compression quick controls -->
+      <div class="fx-panel">
+        <div class="knob-group">
+          <label>Reverb</label>
+          <input type="range" id="fx-reverb" class="slider fx-slider" min="0" max="100" step="1" value="0" />
+          <div class="value-badge" id="fx-reverb-val">0 %</div>
+        </div>
+        <div class="knob-group">
+          <label>Kompressor</label>
+          <input type="range" id="fx-comp" class="slider fx-slider" min="0" max="100" step="1" value="0" />
+          <div class="value-badge" id="fx-comp-val">0 %</div>
+        </div>
+        <div class="knob-group">
+          <label>Panorama</label>
+          <input type="range" id="fx-pan" class="slider fx-slider" min="-100" max="100" step="1" value="0" />
+          <div class="value-badge" id="fx-pan-val">C</div>
+        </div>
+      </div>
+
+    </section><!-- /mixer -->
+
+    <!-- Meter section -->
+    <section class="meter-section">
+      <div class="meter-label">Output-Pegel</div>
+      <div class="meter-bar-wrap">
+        <div id="meter-bar" class="meter-bar"></div>
+      </div>
+      <div class="meter-scale">
+        <span>0</span><span>-6</span><span>-12</span><span>-18</span><span>-∞</span>
+      </div>
+    </section>
+
+    <!-- Submit -->
+    <div class="submit-row">
+      <button id="btn-submit" class="btn btn-submit">✅ Mix abgeben</button>
+      <button id="btn-reset"  class="btn btn-reset">↺ Zurücksetzen</button>
+    </div>
+
+    <!-- Result overlay -->
+    <div id="result-overlay" class="result-overlay hidden">
+      <div class="result-box">
+        <div id="result-emoji" class="result-emoji">🎉</div>
+        <h2 id="result-title">Fantastisch!</h2>
+        <p id="result-msg"></p>
+        <div class="result-breakdown" id="result-breakdown"></div>
+        <button id="btn-next" class="btn btn-next">Weiter ▶</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ===== TUTORIAL OVERLAY ===== -->
+  <div id="tutorial-overlay" class="tutorial-overlay">
+    <div class="tutorial-box">
+      <h1>🎛️ Willkommen bei <em>MixMaster</em>!</h1>
+      <p>Hier lernst du, wie man Audio richtig abmischt – spielerisch und mit sofortigem Feedback.</p>
+      <ul>
+        <li>🎵 Höre zuerst den <strong>Referenz-Mix</strong>, um das Ziel zu hören.</li>
+        <li>🎚 Stelle <strong>Höhen, Mitten, Tiefen</strong> und <strong>Lautstärke</strong> ein.</li>
+        <li>▶ Spiele deinen Mix ab und vergleiche ihn.</li>
+        <li>✅ Gib deinen Mix ab – je näher am Ziel, desto mehr Punkte!</li>
+        <li>📈 Steige durch Level auf und werde zum Mix-Profi.</li>
+      </ul>
+      <button id="btn-start" class="btn btn-next">Jetzt spielen 🎮</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

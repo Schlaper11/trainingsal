@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StageLight – DMX Lighting Control</title>
+  <link rel="stylesheet" href="stage.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="logo">💡 Stage<span>Light</span></div>
+
+    <div class="dmx-info">
+      <span>Universe: <strong>1</strong></span>
+      <span>Lichter: <strong id="light-count">0</strong></span>
+      <span>DMX-Channels: <strong id="dmx-used">0</strong> / 512</span>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-add" id="btn-add-light">+ Licht hinzufügen</button>
+      <button class="btn btn-secondary" id="btn-auto-addr">Auto-Adressieren</button>
+      <button class="btn btn-secondary" id="btn-all-off">Alle AUS</button>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main>
+
+    <!-- Stage Canvas -->
+    <section class="stage-section">
+      <h2>🎭 Bühne – Bird's-Eye View</h2>
+      <canvas id="stage-canvas" width="900" height="280"></canvas>
+      <div class="stage-controls">
+        <label>
+          <input type="checkbox" id="show-beams" checked />
+          Lichtstrahlen zeigen
+        </label>
+        <label>
+          <input type="checkbox" id="show-labels" checked />
+          Beschriftungen
+        </label>
+        <span style="margin-left:.8rem; color: var(--text-dim); font-size:.75rem;">
+          Klicke auf ein Licht, um es auszuwählen
+        </span>
+      </div>
+    </section>
+
+    <!-- Channel Strips -->
+    <section class="strips-section">
+      <div class="strips-header">
+        <h2>🎚️ Kanal-Strips</h2>
+      </div>
+      <div id="channel-strips">
+        <!-- strips injected by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== ADD LIGHT MODAL ===== -->
+  <div class="modal-overlay hidden" id="add-modal">
+    <div class="modal-box">
+      <h3>💡 Neues Licht hinzufügen</h3>
+
+      <div class="form-group">
+        <label for="new-name">Name</label>
+        <input type="text" id="new-name" class="form-input" placeholder="z.B. Spot Links" value="" />
+      </div>
+
+      <div class="form-group">
+        <label for="new-type">Typ</label>
+        <select id="new-type" class="form-select">
+          <option value="par">PAR (Intensität + RGB)</option>
+          <option value="spot">Spot (Intensität + Pan/Tilt)</option>
+          <option value="rgb">RGB Flood (Vollfarbe)</option>
+          <option value="moving">Moving Head (Pan/Tilt + RGB)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="new-dmx">DMX-Startadresse (1–512)</label>
+        <input type="number" id="new-dmx" class="form-input" min="1" max="512" value="1" />
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="btn-modal-cancel">Abbrechen</button>
+        <button class="btn btn-add" id="btn-modal-add">Hinzufügen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div id="toast"></div>
+
+  <script src="stage.js"></script>
+</body>
+</html>

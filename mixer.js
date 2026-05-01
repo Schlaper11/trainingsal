@@ -103,7 +103,7 @@ function buildChannelStrip(def, index) {
   const sel = el('select', 'input-selector');
   sel.id = `ch-sel-${index}`;
   const sourceOptions = [
-    { value: 'none',      label: '—  Aus' },
+    { value: 'none',      label: '— Aus' },
     { value: 'guitar',    label: '🎸 Gitarre' },
     { value: 'bass',      label: '🎸 Bass' },
     { value: 'drums',     label: '🥁 Drums' },
@@ -266,7 +266,7 @@ function startChannelSource(ch) {
     osc.type = cfg.type;
     osc.frequency.value = freq;
 
-    // slight detune for richness
+    // slight detune (±4 cents) for richness / ensemble effect
     osc.detune.value = (Math.random() - 0.5) * 8;
 
     if (cfg.isNoise) {
@@ -282,7 +282,7 @@ function startChannelSource(ch) {
       ch.oscNodes.push(noiseOsc);
     }
 
-    // Per-osc gain to avoid clipping when many freqs
+    // Divide gain equally across oscillators to prevent clipping when combined
     const oscGain = ctx.createGain();
     oscGain.gain.value = 0.25 / cfg.freqs.length;
     osc.connect(oscGain);
@@ -292,12 +292,12 @@ function startChannelSource(ch) {
     ch.oscNodes.push(osc, oscGain);
   });
 
-  // LFO for tremolo / vibrato effect
+  // LFO for tremolo / vibrato effect (0.8–2.3 Hz for natural modulation)
   if (cfg.lfo) {
     const lfo = ctx.createOscillator();
     lfo.frequency.value = 0.8 + Math.random() * 1.5;
     const lfoGain = ctx.createGain();
-    lfoGain.gain.value = 0.03;
+    lfoGain.gain.value = 0.03; // subtle tremolo depth
     lfo.connect(lfoGain);
     lfoGain.connect(ch.gainNode.gain);
     lfo.start();
@@ -372,7 +372,7 @@ function rmsFromAnalyser(analyser) {
 }
 
 function updateMeter(leds, rms, peak) {
-  // Convert RMS to LED level (0-1 → 0-ledCount)
+  // Scale RMS to LED count (×3.5 maps typical speech/music RMS to full meter)
   const level = Math.min(1, rms * 3.5);
   const lit = Math.round(level * leds.length);
   leds.forEach((led, i) => {
@@ -387,6 +387,7 @@ function animLoop() {
   channels.forEach(ch => {
     if (!ch.analyser || !ch.leds) return;
     const rms = rmsFromAnalyser(ch.analyser);
+    // Decay factor 0.92 per frame (~60 fps) gives a smooth ~0.3 s peak fallback
     ch.peakRms = Math.max(ch.peakRms * 0.92, rms);
     updateMeter(ch.leds, ch.peakRms);
   });
@@ -400,10 +401,10 @@ function animLoop() {
     updateMeter(masterState.ledsL, masterState.peakL);
     updateMeter(masterState.ledsR, masterState.peakR);
 
-    // Clip indicator (>= 0.9 RMS = clipping)
+    // Clip indicator: RMS >= 0.9 indicates near-digital-full (clipping risk)
     const clipping = masterState.peakL > 0.9 || masterState.peakR > 0.9;
     $('clip-led').classList.toggle('active', clipping);
-    if (clipping) masterState.clipTimeout = Date.now() + 1500;
+    if (clipping) masterState.clipTimeout = Date.now() + 1500; // hold for 1.5 s
     if (Date.now() < masterState.clipTimeout) $('clip-led').classList.add('active');
   }
 }

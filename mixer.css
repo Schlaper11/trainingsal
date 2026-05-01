@@ -79,7 +79,7 @@ html, body {
   padding: .3rem .6rem;
   border: 1px solid #2a2f44;
   border-radius: 4px;
-  font-size: .75rem;
+  font-size: 0.75rem;
   letter-spacing: .06em;
   color: var(--text-dim);
 }
